@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mymer | 自己紹介</title>
+  <style>
+    /* ==========================================================================
+       ベース設定・カスタムプロパティ（デザインシステム）
+       ========================================================================== */
+    :root {
+      --bg-gradient-start: #f4f7f9;
+      --bg-gradient-end: #e6eef4;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-sub: #475569;
+      --text-muted: #64748b;
+      --accent-primary: #3b82f6;
+      --accent-secondary: #0ea5e9;
+      --accent-soft: #eff6ff;
+      --border-color: #e2e8f0;
+      --shadow-card: 0 20px 40px -15px rgba(15, 23, 42, 0.08), 0 0 1px 1px rgba(15, 23, 42, 0.03);
+      --radius-card: 24px;
+      --radius-pill: 9999px;
+      --radius-inner: 16px;
+    }
+
+    /* ダークモード自動対応（システム設定に連動） */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-gradient-start: #0f172a;
+        --bg-gradient-end: #1e293b;
+        --card-bg: #1e293b;
+        --text-main: #f8fafc;
+        --text-sub: #cbd5e1;
+        --text-muted: #94a3b8;
+        --accent-primary: #60a5fa;
+        --accent-secondary: #38bdf8;
+        --accent-soft: rgba(59, 130, 246, 0.15);
+        --border-color: #334155;
+        --shadow-card: 0 20px 40px -15px rgba(0, 0, 0, 0.4), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+      }
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      /* OS標準の読みやすいシステムフォントのみを使用 */
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, "Segoe UI", Roboto, sans-serif;
+      color: var(--text-main);
+      background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      line-height: 1.7;
+      padding: 1.5rem 1rem;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* ==========================================================================
+       背景の幾何学装飾（CSSのみで生成）
+       ========================================================================== */
+    .bg-decoration {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .bg-circle-1 {
+      position: absolute;
+      top: -10%;
+      right: -5%;
+      width: 45vw;
+      height: 45vw;
+      max-width: 500px;
+      max-height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+    }
+
+    .bg-circle-2 {
+      position: absolute;
+      bottom: -10%;
+      left: -5%;
+      width: 50vw;
+      height: 50vw;
+      max-width: 550px;
+      max-height: 550px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(14, 165, 233, 0.08) 0%, transparent 70%);
+    }
+
+    /* ==========================================================================
+       メインレイアウト（レスポンシブコンテナ）
+       ========================================================================== */
+    .wrapper {
+      width: 100%;
+      max-width: 720px;
+      margin: auto 0;
+      z-index: 1;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    /* ==========================================================================
+       ヒーローセクション（メインビジュアル）
+       ========================================================================== */
+    .hero {
+      position: relative;
+      padding: 3rem 1.5rem 2.25rem;
+      text-align: center;
+      background: linear-gradient(180deg, var(--accent-soft) 0%, transparent 100%);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    /* 幾何学SVGアバター */
+    .avatar-container {
+      width: 104px;
+      height: 104px;
+      margin: 0 auto 1.25rem;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      padding: 4px;
+      box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-color: var(--card-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .avatar-svg {
+      width: 68%;
+      height: 68%;
+      display: block;
+    }
+
+    /* 学年バッジ */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background-color: var(--accent-soft);
+      color: var(--accent-primary);
+      font-size: 0.875rem;
+      font-weight: 700;
+      padding: 0.35rem 1rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.03em;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--accent-primary);
+    }
+
+    /* 名前タイトル */
+    .hero-name {
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+      color: var(--text-main);
+    }
+
+    /* ==========================================================================
+       コンテンツエリア（挨拶 & プロフィール）
+       ========================================================================== */
+    .content {
+      padding: 2rem 1.5rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    /* セクション見出し */
+    .section-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-title::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background-color: var(--border-color);
+    }
+
+    /* 挨拶メッセージボックス */
+    .greeting-box {
+      background-color: var(--accent-soft);
+      border-radius: var(--radius-inner);
+      padding: 1.5rem;
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      text-align: center;
+    }
+
+    .greeting-text {
+      font-size: clamp(1rem, 2.5vw, 1.125rem);
+      font-weight: 500;
+      color: var(--text-main);
+      line-height: 1.8;
+    }
+
+    /* プロフィールグリッド（狭い画面は1列、広い画面は2列） */
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .profile-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.25rem;
+      border-radius: var(--radius-inner);
+      border: 1px solid var(--border-color);
+      background-color: var(--card-bg);
+    }
+
+    .profile-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background-color: var(--accent-soft);
+      color: var(--accent-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      min-width: 0;
+      width: 100%;
+    }
+
+    .profile-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .profile-value {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--text-main);
+      word-break: break-word;
+      line-height: 1.4;
+    }
+
+    /* 趣味タグバッジ */
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.25rem;
+    }
+
+    .tag-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+      background-color: var(--accent-soft);
+      padding: 0.3rem 0.85rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    /* 食べ物の補足メモ表示 */
+    .food-note {
+      display: inline-block;
+      margin-top: 0.35rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-sub);
+      background-color: var(--accent-soft);
+      padding: 0.35rem 0.75rem;
+      border-radius: 10px;
+      line-height: 1.5;
+    }
+
+    /* ==========================================================================
+       フッター（最小限の表記のみ）
+       ========================================================================== */
+    .footer {
+      width: 100%;
+      max-width: 720px;
+      text-align: center;
+      padding: 1.5rem 0 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      z-index: 1;
+    }
+
+    /* ==========================================================================
+       タブレット・PC向けレスポンシブ調整（広い画面）
+       ========================================================================== */
+    @media (min-width: 640px) {
+      body {
+        padding: 2.5rem 1.5rem;
+      }
+
+      .hero {
+        padding: 3.75rem 2.5rem 2.75rem;
+      }
+
+      .avatar-container {
+        width: 120px;
+        height: 120px;
+      }
+
+      .content {
+        padding: 2.5rem 3rem 3rem;
+        gap: 2.25rem;
+      }
+
+      .greeting-box {
+        padding: 1.75rem 2rem;
+      }
+
+      .profile-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 背景の柔らかな装飾 -->
+  <div class="bg-decoration" aria-hidden="true">
+    <div class="bg-circle-1"></div>
+    <div class="bg-circle-2"></div>
+  </div>
+
+  <!-- メインコンテンツ -->
+  <main class="wrapper">
+    <article class="card">
+
+      <!-- ヒーローセクション：アバター、ステータス、名前 -->
+      <header class="hero">
+        <div class="avatar-container" aria-hidden="true">
+          <div class="avatar-inner">
+            <!-- 純粋な幾何学SVGアイコン（外部画像不使用） -->
+            <svg class="avatar-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="avatarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#3b82f6" />
+                  <stop offset="100%" stop-color="#0ea5e9" />
+                </linearGradient>
+              </defs>
+              <!-- 頭部の円 -->
+              <circle cx="50" cy="36" r="18" fill="url(#avatarGrad)" />
+              <!-- 肩部の半円シルエット -->
+              <path d="M18 86C18 68.3269 32.3269 58 50 58C67.6731 58 82 68.3269 82 86" fill="url(#avatarGrad)" opacity="0.85" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="status-badge">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span>大学1年生</span>
+        </div>
+
+        <h1 class="hero-name">mymer</h1>
+      </header>
+
+      <!-- ボディセクション：挨拶とプロフィール詳細 -->
+      <div class="content">
+
+        <!-- 挨拶セクション -->
+        <section aria-labelledby="heading-greeting">
+          <h2 id="heading-greeting" class="section-title">Greeting</h2>
+          <div class="greeting-box">
+            <p class="greeting-text">
+              はじめまして、大学1年生のmymerです。
+            </p>
+          </div>
+        </section>
+
+        <!-- プロフィールセクション（メモにある情報のみ） -->
+        <section aria-labelledby="heading-profile">
+          <h2 id="heading-profile" class="section-title">Profile</h2>
+          <div class="profile-grid">
+            
+            <!-- 名前 -->
+            <div class="profile-item">
+              <div class="profile-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+              <div class="profile-info">
+                <span class="profile-label">名前</span>
+                <span class="profile-value">mymer</span>
+              </div>
+            </div>
+
+            <!-- 学年 -->
+            <div class="profile-item">
+              <div class="profile-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                  <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                </svg>
+              </div>
+              <div class="profile-info">
+                <span class="profile-label">学年</span>
+                <span class="profile-value">大学1年生</span>
+              </div>
+            </div>
+
+            <!-- 趣味 -->
+            <div class="profile-item">
+              <div class="profile-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="6" y1="12" x2="10" y2="12"></line>
+                  <line x1="8" y1="10" x2="8" y2="14"></line>
+                  <line x1="15" y1="13" x2="15.01" y2="13"></line>
+                  <line x1="18" y1="11" x2="18.01" y2="11"></line>
+                  <rect x="2" y="6" width="20" height="12" rx="4"></rect>
+                </svg>
+              </div>
+              <div class="profile-info">
+                <span class="profile-label">趣味</span>
+                <div class="tag-list">
+                  <span class="tag-badge">ゲーム</span>
+                  <span class="tag-badge">言語学習</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 食べ物 -->
+            <div class="profile-item">
+              <div class="profile-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 11h16a1 1 0 0 1 1 1v.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 12.5V12a1 1 0 0 1 1-1Z"></path>
+                  <path d="M5 11V9a7 7 0 0 1 14 0v2"></path>
+                  <path d="M5 14v2a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-2"></path>
+                </svg>
+              </div>
+              <div class="profile-info">
+                <span class="profile-label">食べ物</span>
+                <span class="profile-value">ハンバーガー</span>
+                <span class="food-note">Burger Kingのマッシュルームワッパーが好き</span>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </article>
+  </main>
+
+  <!-- フッター -->
+  <footer class="footer">
+    <p>&copy; mymer</p>
+  </footer>
+
+</body>
+</html>
